@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-title" content="Banutii lui Timi"/>
+  <meta name="theme-color" content="#667eea"/>
+  <title>Banutii lui Timi</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Nunito','Segoe UI',sans-serif;-webkit-tap-highlight-color:transparent}
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef } = React;
+
+// ── SVG Characters ────────────────────────────────────────────────────────────
+function StitchSVG() {
+  return (
+    <svg width="120" height="110" viewBox="0 0 130 115" style={{filter:"drop-shadow(0 4px 12px #0096c744)"}}>
+      <style>{`
+        @keyframes sf{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+        @keyframes el{0%,100%{transform:rotate(-22deg)}50%{transform:rotate(-10deg)}}
+        @keyframes er{0%,100%{transform:rotate(22deg)}50%{transform:rotate(10deg)}}
+        @keyframes eb{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(0.1)}}
+        .sf{animation:sf 3s ease-in-out infinite}
+        .el{transform-origin:28px 22px;animation:el 2.5s ease-in-out infinite}
+        .er{transform-origin:102px 22px;animation:er 2.5s ease-in-out infinite}
+        .eb{transform-origin:65px 62px;animation:eb 4s ease-in-out infinite}
+      `}</style>
+      <g className="sf">
+        <g className="el"><ellipse cx="28" cy="22" rx="17" ry="26" fill="#3a8fd4"/><ellipse cx="28" cy="24" rx="9" ry="16" fill="#6ab8f7"/></g>
+        <g className="er"><ellipse cx="102" cy="22" rx="17" ry="26" fill="#3a8fd4"/><ellipse cx="102" cy="24" rx="9" ry="16" fill="#6ab8f7"/></g>
+        <ellipse cx="65" cy="72" rx="48" ry="40" fill="#3a8fd4"/>
+        <ellipse cx="65" cy="80" rx="28" ry="22" fill="#5ab0f0" opacity="0.5"/>
+        <g className="eb">
+          <ellipse cx="45" cy="62" rx="13" ry="15" fill="white"/><ellipse cx="85" cy="62" rx="13" ry="15" fill="white"/>
+          <circle cx="48" cy="64" r="8" fill="#1a1a5e"/><circle cx="88" cy="64" r="8" fill="#1a1a5e"/>
+          <circle cx="51" cy="60" r="3" fill="white"/><circle cx="91" cy="60" r="3" fill="white"/>
+        </g>
+        <ellipse cx="65" cy="78" rx="7" ry="5" fill="#2070a0"/>
+        <path d="M 50 86 Q 65 98 80 86" stroke="#2070a0" strokeWidth="3" fill="none" strokeLinecap="round"/>
+        <circle cx="52" cy="33" r="4" fill="#2070a0"/><circle cx="78" cy="33" r="4" fill="#2070a0"/><circle cx="65" cy="28" r="4" fill="#2070a0"/>
+      </g>
+    </svg>
+  );
+}
+
+function KpopSVG() {
+  return (
+    <svg width="120" height="110" viewBox="0 0 130 115" style={{filter:"drop-shadow(0 4px 16px #f15bb566)"}}>
+      <style>{`
+        @keyframes cb{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-5px) rotate(3deg)}}
+        @keyframes sp1{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.5)}}
+        @keyframes sp2{0%,100%{opacity:0.3;transform:scale(0.5)}50%{opacity:1;transform:scale(1)}}
+        .cb{transform-origin:65px 30px;animation:cb 2s ease-in-out infinite}
+        .sp1{animation:sp1 1.5s ease-in-out infinite}.sp2{animation:sp2 1.5s ease-in-out infinite}
+      `}</style>
+      <text className="sp1" x="8" y="25" fontSize="16" fill="#f15bb5">✦</text>
+      <text className="sp2" x="105" y="20" fontSize="14" fill="#9b5de5">✦</text>
+      <text className="sp1" x="12" y="95" fontSize="12" fill="#f15bb5">✦</text>
+      <text className="sp2" x="108" y="100" fontSize="16" fill="#9b5de5">✦</text>
+      <g className="cb">
+        <polygon points="35,45 45,22 55,38 65,18 75,38 85,22 95,45" fill="#ffd700" stroke="#ffaa00" strokeWidth="2"/>
+        <rect x="33" y="43" width="64" height="14" rx="4" fill="#ffd700" stroke="#ffaa00" strokeWidth="2"/>
+        <circle cx="65" cy="24" r="5" fill="#ff4488"/><circle cx="45" cy="30" r="4" fill="#9b5de5"/><circle cx="85" cy="30" r="4" fill="#4cc9f0"/>
+      </g>
+      <rect x="40" y="60" width="8" height="50" rx="2" fill="#d0d0d0" transform="rotate(-15 44 85)"/>
+      <rect x="82" y="60" width="8" height="50" rx="2" fill="#d0d0d0" transform="rotate(15 86 85)"/>
+      <text x="53" y="82" fontSize="22" fill="#f15bb5" className="sp2">♪</text>
+    </svg>
+  );
+}
+
+function GabbySVG() {
+  return (
+    <svg width="120" height="110" viewBox="0 0 130 115" style={{filter:"drop-shadow(0 4px 12px #ff99c844)"}}>
+      <style>{`
+        @keyframes gf{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+        @keyframes bg{0%,88%,100%{transform:scaleY(1)}93%{transform:scaleY(0.08)}}
+        .gf{animation:gf 2.8s ease-in-out infinite}.geb{transform-origin:65px 65px;animation:bg 3.5s ease-in-out infinite}
+      `}</style>
+      <g className="gf">
+        <polygon points="14,52 28,15 46,52" fill="#ff85c1"/><polygon points="22,48 28,22 38,48" fill="#ffb8d8"/>
+        <polygon points="116,52 102,15 84,52" fill="#ff85c1"/><polygon points="108,48 102,22 92,48" fill="#ffb8d8"/>
+        <circle cx="65" cy="68" r="46" fill="#ffb8d8"/>
+        <ellipse cx="30" cy="78" rx="14" ry="10" fill="#ff85c1" opacity="0.5"/>
+        <ellipse cx="100" cy="78" rx="14" ry="10" fill="#ff85c1" opacity="0.5"/>
+        <g className="geb">
+          <ellipse cx="46" cy="62" rx="12" ry="13" fill="white"/><ellipse cx="84" cy="62" rx="12" ry="13" fill="white"/>
+          <circle cx="49" cy="64" r="7" fill="#5a2d7a"/><circle cx="87" cy="64" r="7" fill="#5a2d7a"/>
+          <circle cx="52" cy="60" r="3" fill="white"/><circle cx="90" cy="60" r="3" fill="white"/>
+        </g>
+        <ellipse cx="65" cy="76" rx="6" ry="4" fill="#ff6699"/>
+        <path d="M 55 83 Q 65 93 75 83" stroke="#ff6699" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+        <line x1="20" y1="72" x2="50" y2="76" stroke="#5a2d7a" strokeWidth="1.5" opacity="0.4"/>
+        <line x1="20" y1="80" x2="50" y2="80" stroke="#5a2d7a" strokeWidth="1.5" opacity="0.4"/>
+        <line x1="110" y1="72" x2="80" y2="76" stroke="#5a2d7a" strokeWidth="1.5" opacity="0.4"/>
+        <line x1="110" y1="80" x2="80" y2="80" stroke="#5a2d7a" strokeWidth="1.5" opacity="0.4"/>
+        <ellipse cx="49" cy="25" rx="16" ry="11" fill="#c77dff" transform="rotate(-20 49 25)"/>
+        <ellipse cx="81" cy="25" rx="16" ry="11" fill="#c77dff" transform="rotate(20 81 25)"/>
+        <circle cx="65" cy="26" r="8" fill="#e0aaff"/><circle cx="65" cy="26" r="4" fill="#c77dff"/>
+      </g>
+    </svg>
+  );
+}
+
+function ClasicSVG() {
+  return (
+    <svg width="120" height="100" viewBox="0 0 130 100" style={{filter:"drop-shadow(0 4px 12px #667eea44)"}}>
+      <style>{`
+        @keyframes cs{0%,100%{transform:scaleX(1)}25%{transform:scaleX(0.1)}50%{transform:scaleX(1)}75%{transform:scaleX(0.1)}}
+        @keyframes ss{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.15) rotate(15deg)}}
+        .coin{transform-origin:65px 50px;animation:cs 4s ease-in-out infinite}
+        .star{transform-origin:65px 50px;animation:ss 2s ease-in-out infinite}
+      `}</style>
+      <g className="coin">
+        <circle cx="65" cy="50" r="36" fill="#f5c842"/>
+        <circle cx="65" cy="50" r="30" fill="none" stroke="#FFD700" strokeWidth="2" opacity="0.5"/>
+        <text x="65" y="60" textAnchor="middle" fontSize="22" fill="#8b6914" fontWeight="900">PLN</text>
+      </g>
+      <text className="star" x="10" y="25" fontSize="18" fill="#667eea">⭐</text>
+      <text className="star" x="100" y="25" fontSize="14" fill="#764ba2" style={{animationDelay:"0.5s"}}>⭐</text>
+    </svg>
+  );
+}
+
+// ── Constants ─────────────────────────────────────────────────────────────────
+const THEMES = {
+  clasic: { id:"clasic",name:"Clasic ⭐",headerGrad:"linear-gradient(135deg,#667eea,#764ba2)",btnGrad:"linear-gradient(135deg,#667eea,#764ba2)",successGrad:"linear-gradient(135deg,#6BCB77,#4ECDC4)",dangerGrad:"linear-gradient(135deg,#FF6B6B,#ee0979)",bg:"#F4F6FF",cardBg:"white",cardBorder:"#e8e8e8",accent:"#667eea",accentText:"#667eea",textPrimary:"#333",textSecondary:"#888",textMuted:"#bbb",inputBorder:"#eee",tabActiveBg:"#667eea18",tabActiveColor:"#667eea",tabInactiveColor:"#bbb",splitBg:"#f9f9ff",ghostBg:"#efefef",ghostColor:"#555",Character:ClasicSVG,charBg:"linear-gradient(180deg,#667eea11,#764ba211)",charLabel:"Economiseste cu intelepciune! ⭐",charLabelColor:"#667eea" },
+  stitch: { id:"stitch",name:"Stitch 🌊",headerGrad:"linear-gradient(135deg,#0096c7,#023e8a)",btnGrad:"linear-gradient(135deg,#0096c7,#0077b6)",successGrad:"linear-gradient(135deg,#00b4d8,#48cae4)",dangerGrad:"linear-gradient(135deg,#ef233c,#d90429)",bg:"#e0f4fd",cardBg:"white",cardBorder:"#b8def5",accent:"#0096c7",accentText:"#0077b6",textPrimary:"#023e8a",textSecondary:"#0096c7",textMuted:"#7fb8d0",inputBorder:"#b0d8ee",tabActiveBg:"#0096c722",tabActiveColor:"#0096c7",tabInactiveColor:"#7fb8d0",splitBg:"#e8f4fd",ghostBg:"#cce7f5",ghostColor:"#0077b6",Character:StitchSVG,charBg:"linear-gradient(180deg,#0096c718,#023e8a0d)",charLabel:"Ohana inseamna familie! 💙",charLabelColor:"#0096c7" },
+  kpop: { id:"kpop",name:"Demon Hunter ⚔️",headerGrad:"linear-gradient(135deg,#9b5de5,#f15bb5)",btnGrad:"linear-gradient(135deg,#9b5de5,#f15bb5)",successGrad:"linear-gradient(135deg,#4cc9f0,#4361ee)",dangerGrad:"linear-gradient(135deg,#f72585,#b5179e)",bg:"#1a0a2e",cardBg:"#2d1b4e",cardBorder:"#4a2870",accent:"#f15bb5",accentText:"#f15bb5",textPrimary:"#f0e6ff",textSecondary:"#c9a0ff",textMuted:"#7b5ea7",inputBorder:"#4a2870",tabActiveBg:"#f15bb522",tabActiveColor:"#f15bb5",tabInactiveColor:"#7b5ea7",splitBg:"#3d1f5e",ghostBg:"#4a2870",ghostColor:"#c9a0ff",Character:KpopSVG,charBg:"linear-gradient(180deg,#f15bb518,#9b5de50d)",charLabel:"Demon Hunter Mode ON! ⚔️",charLabelColor:"#f15bb5" },
+  gabby: { id:"gabby",name:"Gabby 🐱",headerGrad:"linear-gradient(135deg,#ff99c8,#c77dff)",btnGrad:"linear-gradient(135deg,#ff85c1,#c77dff)",successGrad:"linear-gradient(135deg,#a8edea,#9be7c4)",dangerGrad:"linear-gradient(135deg,#ff6b9d,#c44569)",bg:"#fff0f8",cardBg:"white",cardBorder:"#ffd6eb",accent:"#c77dff",accentText:"#b56aee",textPrimary:"#5a2d7a",textSecondary:"#c77dff",textMuted:"#dda0f0",inputBorder:"#ffd6eb",tabActiveBg:"#c77dff22",tabActiveColor:"#c77dff",tabInactiveColor:"#dda0f0",splitBg:"#fff5fb",ghostBg:"#fde8f5",ghostColor:"#b56aee",Character:GabbySVG,charBg:"linear-gradient(180deg,#ff99c818,#c77dff0d)",charLabel:"Gabby's Dollhouse e deschisa! 🏠",charLabelColor:"#c77dff" },
+};
+
+const CATS = [
+  {id:"spend",label:"Cheltuiesc",emoji:"🛍️",color:"#FF6B6B",bg:"#FFF0F0"},
+  {id:"save",label:"Economisesc",emoji:"🎯",color:"#4ECDC4",bg:"#F0FFFE"},
+  {id:"give",label:"Daruiesc",emoji:"🎁",color:"#FFB347",bg:"#FFF8F0"},
+  {id:"invest",label:"Investesc",emoji:"🌱",color:"#6BCB77",bg:"#F0FFF2"},
+];
+
+const CAT_GROUPS = [
+  {key:"organizare",label:"📦 Organizare"},
+  {key:"bucatarie",label:"🍽️ Bucatarie"},
+  {key:"curatenie",label:"🧹 Curatenie"},
+  {key:"speciale",label:"✨ Speciale"},
+];
+
+const DEFAULT_JOBS = [
+  {id:"j1",cat:"organizare",emoji:"🧦",name:"Sortat sosetele pentru toata familia"},
+  {id:"j2",cat:"organizare",emoji:"🖍️",name:"Sortat creioanele si cariocile pe culori"},
+  {id:"j3",cat:"organizare",emoji:"🧸",name:"Adunat si sortat jucariile din camera de zi"},
+  {id:"j4",cat:"organizare",emoji:"👟",name:"Aranjat pantofii la intrare pentru toata familia"},
+  {id:"j5",cat:"organizare",emoji:"🎨",name:"Reorganizat jucariile si materialele creative"},
+  {id:"j6",cat:"organizare",emoji:"🗂️",name:"Reorganizat un sertar sau cos cu materiale"},
+  {id:"j7",cat:"bucatarie",emoji:"🍽️",name:"Aranjat masa inainte de masa"},
+  {id:"j8",cat:"bucatarie",emoji:"🥕",name:"Ajutat la spalat legumele"},
+  {id:"j9",cat:"bucatarie",emoji:"👩‍🍳",name:"Turnat ingrediente la gatit"},
+  {id:"j10",cat:"bucatarie",emoji:"🛒",name:"Aranjat cumparaturile in dulap"},
+  {id:"j11",cat:"curatenie",emoji:"✨",name:"Sters praful de pe o mobila specifica"},
+  {id:"j12",cat:"curatenie",emoji:"🌿",name:"Udat plantele din casa"},
+  {id:"j13",cat:"curatenie",emoji:"🚗",name:"Ajutat la spalat masina"},
+  {id:"j14",cat:"curatenie",emoji:"♻️",name:"Strans si pus la loc pungile de plastic"},
+  {id:"j15",cat:"speciale",emoji:"🏠",name:"Ajutat la un proiect de decorat casa"},
+  {id:"j16",cat:"speciale",emoji:"🃏",name:"Sortarea cartilor de joc sau puzzle-urilor"},
+  {id:"j17",cat:"speciale",emoji:"🎁",name:"Ajutat la impachetat cadouri"},
+  {id:"j18",cat:"speciale",emoji:"💌",name:"Facut felicitari handmade"},
+];
+
+const DEFAULT_MSG = {
+  goal:["Timi, ai reusit! Ai asteptat, ai ales si ai castigat. Asta e puterea ta! 🌟","Banii tai au crescut pentru ca tu ai avut rabdare. Bravo, campioana mea! 🏆","Stiai ca poti? Eu stiam. Felicitari ca ai dovedit-o! ⭐","Obiectiv atins! Acum tu decizi ce urmeaza. 🎯"],
+  job:["Multumesc ca ai ajutat! Familia noastra functioneaza mai bine cu tine. 💪","Ai facut o treaba adevarata azi. Esti mandra de tine? 😊","Ai rezolvat o problema reala. Asta inseamna sa castigi bani. 💰"],
+  invest:["Acesti bani merg sa doarma si sa creasca. Ca o samanta. 🌱","Timi din viitor iti multumeste tie de acum. 🚀","Banii tai lucreaza chiar si cand tu te joci. ✨"],
+};
+
+const GOAL_EMOJIS = ["🦄","📚","🎨","🌈","⭐","🏆","🚲","🎮","👗","🐶","🎭","🎪"];
+const CUSTOM_EMOJIS = ["⭐","🌟","💡","🔧","🎨","🎵","📦","🧪","🌺","🦋","🌙","💎"];
+const HIST_CATS = [{id:"all",label:"Toate",emoji:"📋"},{id:"income",label:"Incasari",emoji:"💰"},{id:"spend",label:"Cheltuiesc",emoji:"🛍️"},{id:"save",label:"Economisesc",emoji:"🎯"},{id:"give",label:"Daruiesc",emoji:"🎁"},{id:"invest",label:"Investesc",emoji:"🌱"},{id:"job",label:"Joburi",emoji:"💼"}];
+const HIST_PERIODS = [{id:"all",label:"Tot"},{id:"week",label:"Sapt."},{id:"month",label:"Luna"},{id:"3month",label:"3 luni"}];
+const INIT = {balances:{spend:0,save:0,give:0,invest:0},transactions:[],goal:{name:"",amount:0,emoji:"🦄",reached:false},jobs:DEFAULT_JOBS,messages:DEFAULT_MSG,splits:{spend:50,save:30,give:10,invest:10},themeId:"clasic"};
+
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2);
+function sGet(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch{return null;}}
+function sSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+function dateInRange(ds,p){if(p==="all")return true;const pts=ds.split(".");if(pts.length<3)return true;const d=new Date(parseInt(pts[2]),parseInt(pts[1])-1,parseInt(pts[0]));const diff=Date.now()-d;return p==="week"?diff<=7*864e5:p==="month"?diff<=30*864e5:p==="3month"?diff<=90*864e5:true;}
+function txMatch(tx,f){if(f==="all")return true;if(f==="income")return tx.type==="income";if(f==="job")return tx.type==="job";if(tx.type==="expense")return tx.cat===f;if(tx.type==="income")return tx.splits?.[f]>0;return false;}
+
+function Confetti({show}){
+  if(!show)return null;
+  const colors=["#FF6B6B","#4ECDC4","#FFD93D","#6BCB77","#9b5de5","#FF9FF3"];
+  return <div style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:9999,overflow:"hidden"}}>
+    {Array.from({length:30},(_,i)=><div key={i} style={{position:"absolute",left:`${Math.random()*100}%`,top:-20,width:8+Math.floor(Math.random()*8),height:8+Math.floor(Math.random()*8),background:colors[i%colors.length],borderRadius:3,animation:`cfall ${1.8+Math.random()*1.2}s ease-in ${(Math.random()*.8).toFixed(2)}s forwards`}}/>)}
+  </div>;
+}
+
+function Modal({msg,onClose,th}){
+  return <div onClick={onClose} style={{position:"fixed",inset:0,background:"#00000077",zIndex:9998,display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
+    <div onClick={e=>e.stopPropagation()} style={{background:th.cardBg,borderRadius:28,padding:"32px 24px",textAlign:"center",maxWidth:320,width:"100%",boxShadow:"0 24px 64px #00000044"}}>
+      <div style={{fontSize:60,marginBottom:12}}>🎉</div>
+      <div style={{fontWeight:800,fontSize:18,color:th.accentText,marginBottom:22,lineHeight:1.5}}>{msg}</div>
+      <button onClick={onClose} style={{background:th.btnGrad,color:"white",border:"none",borderRadius:16,padding:"13px 36px",fontWeight:800,fontSize:16,cursor:"pointer",fontFamily:"inherit"}}>Super! 🌟</button>
+    </div>
+  </div>;
+}
+
+function SpendToast({data,onDone}){
+  useEffect(()=>{const t=setTimeout(onDone,2800);return()=>clearTimeout(t);},[]);
+  const cat=CATS.find(c=>c.id===data.cat);
+  return <div style={{position:"fixed",bottom:100,left:"50%",transform:"translateX(-50%)",zIndex:9990,background:"white",borderRadius:20,padding:"14px 22px",boxShadow:"0 8px 32px #00000022",border:`3px solid ${cat?.color}55`,minWidth:260,textAlign:"center",pointerEvents:"none"}}>
+    <div style={{fontSize:32,marginBottom:4}}>{cat?.emoji}</div>
+    <div style={{fontWeight:900,fontSize:22,color:cat?.color}}>-{data.amount.toFixed(2)} PLN</div>
+    <div style={{fontWeight:700,fontSize:12,color:"#888",marginTop:4}}>din <strong style={{color:cat?.color}}>{cat?.label}</strong></div>
+    <div style={{marginTop:8,background:cat?.bg,borderRadius:10,padding:"5px 12px",fontSize:12,fontWeight:800,color:cat?.color}}>Ramas: {data.newBalance.toFixed(2)} PLN</div>
+  </div>;
+}
+
+function JobSplitModal({job,amount,splits,onChange,onConfirm,onCancel,th}){
+  const total=Object.values(splits).reduce((a,b)=>a+b,0);
+  return <div style={{position:"fixed",inset:0,background:"#00000077",zIndex:9995,display:"flex",alignItems:"flex-end",justifyContent:"center"}}>
+    <div style={{background:th.cardBg,borderRadius:"24px 24px 0 0",padding:24,width:"100%",maxWidth:500,boxShadow:"0 -8px 40px #00000033"}}>
+      <div style={{fontWeight:900,fontSize:16,color:th.accentText,marginBottom:4}}>💰 Unde mergi banii castigati?</div>
+      <div style={{fontSize:13,color:th.textSecondary,marginBottom:16}}>{job.emoji} {job.name} — <strong>{amount} PLN</strong></div>
+      {CATS.map(c=><div key={c.id} style={{marginBottom:12}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
+          <span style={{fontWeight:700,fontSize:13,color:th.textPrimary}}>{c.emoji} {c.label}</span>
+          <div style={{display:"flex",alignItems:"center",gap:6}}>
+            <span style={{color:th.textMuted,fontSize:11}}>({((splits[c.id]/100)*amount).toFixed(2)} PLN)</span>
+            <input type="number" min="0" max="100" value={splits[c.id]} onChange={e=>onChange(c.id,Math.min(100,Math.max(0,parseInt(e.target.value)||0)))}
+              style={{width:50,border:`2px solid ${c.color}55`,borderRadius:8,padding:"3px 6px",fontWeight:900,fontSize:14,color:c.color,textAlign:"center",outline:"none",background:th.cardBg,fontFamily:"inherit"}}/>
+            <span style={{fontWeight:700,color:c.color,fontSize:13}}>%</span>
+          </div>
+        </div>
+        <input type="range" min="0" max="100" value={splits[c.id]} style={{accentColor:c.color,width:"100%"}} onChange={e=>onChange(c.id,parseInt(e.target.value))}/>
+      </div>)}
+      <div style={{textAlign:"center",fontSize:12,fontWeight:800,borderRadius:10,padding:"6px",marginBottom:14,color:total===100?"#6BCB77":total>100?"#FF6B6B":"#FFB347",background:total===100?"#f0fff4":total>100?"#fff0f0":"#fff8f0"}}>
+        {total===100?"✅ Perfect! Total: 100%":total>100?`⚠️ Prea mult: ${total}%`:`⚠️ Total: ${total}% — mai adauga ${100-total}%`}
+      </div>
+      <div style={{display:"flex",gap:10}}>
+        <button onClick={onCancel} style={{flex:1,border:"none",borderRadius:14,padding:13,fontWeight:800,fontSize:15,cursor:"pointer",background:th.ghostBg,color:th.ghostColor,fontFamily:"inherit"}}>Anuleaza</button>
+        <button onClick={onConfirm} disabled={total!==100} style={{flex:2,border:"none",borderRadius:14,padding:13,fontWeight:800,fontSize:15,cursor:total===100?"pointer":"not-allowed",background:total===100?th.btnGrad:th.ghostBg,color:total===100?"white":th.ghostColor,opacity:total===100?1:0.5,fontFamily:"inherit"}}>✅ Confirma!</button>
+      </div>
+    </div>
+  </div>;
+}
+
+function App(){
+  const [app,setApp]         = useState(()=>sGet("blt_v1")||INIT);
+  const [tab,setTab]         = useState("home");
+  const [hView,setHView]     = useState("add");
+  const [modal,setModal]     = useState(null);
+  const [confetti,setConfetti]=useState(false);
+  const [shake,setShake]     = useState(false);
+  const [toast,setToast]     = useState(null);
+  const [wAmt,setWAmt]       = useState("");
+  const [wDesc,setWDesc]     = useState("");
+  const [sAmt,setSAmt]       = useState("");
+  const [sDesc,setSDesc]     = useState("");
+  const [sCat,setSCat]       = useState("spend");
+  const [editGoal,setEditGoal]=useState(false);
+  const [gDraft,setGDraft]   = useState({name:"",amount:0,emoji:"🦄"});
+  const [jobAmts,setJobAmts] = useState({});
+  const [newJobName,setNewJobName]=useState("");
+  const [newJobEmoji,setNewJobEmoji]=useState("⭐");
+  const [editMsg,setEditMsg] = useState(null);
+  const [editVal,setEditVal] = useState("");
+  const [impMsg,setImpMsg]   = useState("");
+  const [hCat,setHCat]       = useState("all");
+  const [hPer,setHPer]       = useState("all");
+  const [jobModal,setJobModal]= useState(null);
+  const [jobSplits,setJobSplits]=useState({spend:100,save:0,give:0,invest:0});
+  const fileRef=useRef();
+  const goalRef=useRef(false);
+  const th=THEMES[app.themeId]||THEMES.clasic;
+  const Char=th.Character;
+
+  useEffect(()=>{ sSet("blt_v1",app); },[app]);
+
+  useEffect(()=>{
+    const reached=app.goal.amount>0&&app.balances.save>=app.goal.amount;
+    if(reached&&!goalRef.current){goalRef.current=true;setApp(a=>({...a,goal:{...a.goal,reached:true}}));setTimeout(()=>celebrate(pick(app.messages.goal)),400);}
+    if(!reached)goalRef.current=false;
+  },[app.balances.save,app.goal.amount]);
+
+  const celebrate=m=>{setModal(m);setConfetti(true);setTimeout(()=>setConfetti(false),2800);};
+  const doShake=()=>{setShake(true);setTimeout(()=>setShake(false),500);};
+
+  function addMoney(){
+    const val=parseFloat(wAmt);if(!val||val<=0){doShake();return;}
+    const portions={},nb={...app.balances};
+    CATS.forEach(c=>{const p=parseFloat(((app.splits[c.id]/100)*val).toFixed(2));portions[c.id]=p;nb[c.id]=parseFloat((nb[c.id]+p).toFixed(2));});
+    const tx={id:uid(),date:new Date().toLocaleDateString("ro-RO"),type:"income",desc:wDesc||"Bani de buzunar",total:val,splits:portions};
+    setApp(a=>({...a,balances:nb,transactions:[tx,...a.transactions]}));
+    if(portions.invest>0)setTimeout(()=>celebrate(pick(app.messages.invest)),500);
+    setWAmt("");setWDesc("");
+  }
+
+  function spendMoney(){
+    const val=parseFloat(sAmt);if(!val||val<=0||val>app.balances[sCat]){doShake();return;}
+    const nb={...app.balances,[sCat]:parseFloat((app.balances[sCat]-val).toFixed(2))};
+    const tx={id:uid(),date:new Date().toLocaleDateString("ro-RO"),type:"expense",cat:sCat,desc:sDesc||"Cheltuiala",amount:val};
+    setApp(a=>({...a,balances:nb,transactions:[tx,...a.transactions]}));
+    setToast({cat:sCat,amount:val,newBalance:nb[sCat]});setSAmt("");setSDesc("");
+  }
+
+  function openJobSplit(job){const val=parseFloat(jobAmts[job.id]||0);if(!val||val<=0)return;setJobSplits({spend:100,save:0,give:0,invest:0});setJobModal({job,amount:val});}
+  function changeJobSplit(catId,raw){setJobSplits(s=>({...s,[catId]:Math.min(100,Math.max(0,parseInt(raw)||0))}));}
+  function confirmJob(){
+    if(!jobModal)return;
+    const {job,amount}=jobModal;
+    const nb={...app.balances};const portions={};
+    CATS.forEach(c=>{const p=parseFloat(((jobSplits[c.id]/100)*amount).toFixed(2));portions[c.id]=p;nb[c.id]=parseFloat((nb[c.id]+p).toFixed(2));});
+    const tx={id:uid(),date:new Date().toLocaleDateString("ro-RO"),type:"job",jobEmoji:job.emoji,jobName:job.name,amount,splits:portions};
+    setApp(a=>({...a,balances:nb,transactions:[tx,...a.transactions]}));
+    setJobAmts(j=>({...j,[job.id]:""}));setJobModal(null);
+    if(portions.invest>0)setTimeout(()=>celebrate(pick(app.messages.invest)),500);
+    else celebrate(pick(app.messages.job));
+  }
+
+  const changeSplit=(id,raw)=>setApp(a=>({...a,splits:{...a.splits,[id]:Math.min(100,Math.max(0,parseInt(raw)||0))}}));
+  function saveGoal(){setApp(a=>({...a,goal:{...a.goal,...gDraft,reached:false}}));goalRef.current=false;setEditGoal(false);}
+  function startEdit(type,idx){setEditMsg({type,idx});setEditVal(app.messages[type][idx]);}
+  function saveMsg(){if(!editVal.trim())return;setApp(a=>({...a,messages:{...a.messages,[editMsg.type]:a.messages[editMsg.type].map((m,i)=>i===editMsg.idx?editVal:m)}}));setEditMsg(null);}
+  function addMsg(type){setApp(a=>({...a,messages:{...a.messages,[type]:[...a.messages[type],"Mesaj nou ✨"]}}));}
+  function delMsg(type,idx){setApp(a=>({...a,messages:{...a.messages,[type]:a.messages[type].filter((_,i)=>i!==idx)}}));}
+  function doExport(){const blob=new Blob([JSON.stringify({...app,exportDate:new Date().toISOString()},null,2)],{type:"application/json"});const a=Object.assign(document.createElement("a"),{href:URL.createObjectURL(blob),download:`banutii-lui-timi-${new Date().toISOString().slice(0,10)}.json`});a.click();URL.revokeObjectURL(a.href);}
+  function doImport(e){setImpMsg("");const file=e.target.files?.[0];if(!file)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(!d.balances||!d.transactions)throw 0;setApp({balances:d.balances||INIT.balances,transactions:d.transactions||[],goal:d.goal||INIT.goal,jobs:d.jobs||DEFAULT_JOBS,messages:d.messages||DEFAULT_MSG,splits:d.splits||INIT.splits,themeId:d.themeId||"clasic"});setImpMsg("✅ Date restaurate!");}catch{setImpMsg("❌ Fisier invalid.");}};r.readAsText(file);e.target.value="";}
+
+  const total=Object.values(app.balances).reduce((a,b)=>a+b,0);
+  const prog=app.goal.amount>0?Math.min((app.balances.save/app.goal.amount)*100,100):0;
+  const sTotal=Object.values(app.splits).reduce((a,b)=>a+b,0);
+  const filtTx=app.transactions.filter(tx=>txMatch(tx,hCat)&&dateInRange(tx.date,hPer));
+
+  const card={background:th.cardBg,borderRadius:20,padding:18,boxShadow:"0 2px 18px #0000000b",border:`1px solid ${th.cardBorder}`};
+  const inp={border:`2px solid ${th.inputBorder}`,borderRadius:12,padding:"11px 14px",fontSize:15,fontWeight:700,width:"100%",outline:"none",background:th.cardBg,color:th.textPrimary,fontFamily:"inherit"};
+
+  return <div style={{minHeight:"100vh",background:th.bg,fontFamily:"'Nunito','Segoe UI',sans-serif",paddingBottom:90,transition:"background .4s"}}>
+    <style>{`
+      @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+      @keyframes cfall{0%{transform:translateY(-30px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+      @keyframes slideIn{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+      @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+      @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+      *{box-sizing:border-box}
+      .btn{border:none;border-radius:14px;padding:11px 18px;font-family:inherit;font-weight:800;font-size:14px;cursor:pointer;transition:all .2s}
+      .btn:active{transform:scale(.96)}
+      .slide{animation:slideIn .3s ease}
+      .shake{animation:shake .4s ease}
+      .float{animation:floatY 3s ease-in-out infinite}
+      input[type=range]{width:100%;accent-color:#667eea}
+      .stab{flex:1;border:none;border-radius:12px;padding:9px 4px;font-family:inherit;font-weight:800;font-size:13px;cursor:pointer;transition:all .2s}
+      .jrow{border:2px solid #eee;border-radius:16px;padding:13px;margin-bottom:8px}
+      .mrow{border:2px solid #f0f0f0;border-radius:12px;padding:10px 12px;margin-bottom:8px;display:flex;align-items:flex-start;gap:8px}
+      .hscroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+      .hscroll::-webkit-scrollbar{display:none}
+      .fpill{border:none;border-radius:20px;padding:6px 12px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;transition:all .2s}
+      .txrow{border-left:4px solid;padding:9px 12px;margin-bottom:7px;border-radius:0 12px 12px 0}
+      .tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 7px;border-radius:7px}
+    `}</style>
+
+    <Confetti show={confetti}/>
+    {modal&&<Modal msg={modal} onClose={()=>setModal(null)} th={th}/>}
+    {toast&&<SpendToast data={toast} onDone={()=>setToast(null)}/>}
+    {jobModal&&<JobSplitModal job={jobModal.job} amount={jobModal.amount} splits={jobSplits} onChange={changeJobSplit} onConfirm={confirmJob} onCancel={()=>setJobModal(null)} th={th}/>}
+
+    <div style={{background:th.headerGrad,padding:"28px 20px 28px",textAlign:"center"}}>
+      <div style={{fontSize:11,color:"white",opacity:0.6,fontWeight:700,letterSpacing:3,marginBottom:6}}>APLICATIA</div>
+      <div style={{fontWeight:900,fontSize:28,color:"white",textShadow:"0 2px 10px #00000033"}}>Banutii lui Timi</div>
+      <div style={{fontSize:12,color:"white",opacity:0.5,marginTop:4}}>{new Date().toLocaleDateString("ro-RO",{weekday:"long",day:"numeric",month:"long"})}</div>
+      <div style={{background:"white",borderRadius:20,padding:"10px 28px",marginTop:16,display:"inline-block",boxShadow:"0 8px 32px #00000022"}}>
+        <div style={{fontSize:10,color:"#aaa",fontWeight:700,letterSpacing:2}}>TOTAL</div>
+        <div style={{fontWeight:900,fontSize:30,color:th.accentText}}>{total.toFixed(2)} <span style={{fontSize:16}}>PLN</span></div>
+      </div>
+    </div>
+
+    <div style={{maxWidth:500,margin:"0 auto",padding:"14px 14px 0"}}>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12}}>
+        {CATS.map(c=><div key={c.id} style={{...card,background:th.id==="kpop"?`${c.color}18`:c.bg,border:`2px solid ${c.color}33`,padding:14,position:"relative",overflow:"hidden"}}>
+          <div style={{position:"absolute",right:-4,bottom:-6,fontSize:34,opacity:0.1}}>{c.emoji}</div>
+          <div style={{fontSize:24}}>{c.emoji}</div>
+          <div style={{fontWeight:900,fontSize:22,color:c.color}}>{app.balances[c.id].toFixed(2)}</div>
+          <div style={{fontSize:11,fontWeight:800,color:c.color,marginTop:2}}>{c.label}</div>
+        </div>)}
+      </div>
+
+      <div style={{borderRadius:20,padding:"16px",marginBottom:12,textAlign:"center",background:th.charBg,border:`1px solid ${th.cardBorder}`}}>
+        <div style={{display:"flex",justifyContent:"center",marginBottom:8}}><Char/></div>
+        <div style={{fontWeight:800,fontSize:13,color:th.charLabelColor}}>{th.charLabel}</div>
+      </div>
+
+      <div style={{...card,marginBottom:12,border:"2px solid #4ECDC444"}}>
+        {editGoal?<>
+          <div style={{fontWeight:900,fontSize:15,marginBottom:12,color:th.textPrimary}}>🎯 Seteaza obiectivul</div>
+          <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:12}}>
+            {GOAL_EMOJIS.map(em=><button key={em} onClick={()=>setGDraft(d=>({...d,emoji:em}))} style={{fontSize:20,background:gDraft.emoji===em?th.tabActiveBg:"transparent",border:`2px solid ${gDraft.emoji===em?th.accent:"transparent"}`,borderRadius:10,padding:4,cursor:"pointer"}}>{em}</button>)}
+          </div>
+          <input style={{...inp,marginBottom:9}} placeholder="Numele obiectivului..." value={gDraft.name} onChange={e=>setGDraft(d=>({...d,name:e.target.value}))}/>
+          <input style={{...inp,marginBottom:12}} type="number" placeholder="Suma necesara (PLN)" value={gDraft.amount||""} onChange={e=>setGDraft(d=>({...d,amount:parseFloat(e.target.value)||0}))}/>
+          <div style={{display:"flex",gap:8}}>
+            <button className="btn" onClick={saveGoal} style={{flex:1,background:th.btnGrad,color:"white"}}>Salveaza ✅</button>
+            <button className="btn" onClick={()=>setEditGoal(false)} style={{flex:1,background:th.ghostBg,color:th.ghostColor}}>Anuleaza</button>
+          </div>
+        </>:<>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <span style={{fontSize:24}}>{app.goal.emoji}</span>
+              <div>
+                <div style={{fontWeight:900,fontSize:14,color:th.textPrimary}}>{app.goal.name||"Seteaza un obiectiv"}</div>
+                <div style={{fontSize:12,color:th.textSecondary}}>{app.balances.save.toFixed(2)} / {app.goal.amount||"?"} PLN</div>
+              </div>
+            </div>
+            <button className="btn" style={{padding:"6px 12px",fontSize:12,background:th.ghostBg,color:th.ghostColor}} onClick={()=>{setGDraft({name:app.goal.name,amount:app.goal.amount,emoji:app.goal.emoji});setEditGoal(true);}}>✏️</button>
+          </div>
+          <div style={{height:22,borderRadius:11,background:th.id==="kpop"?"#4a2870":"#eee",overflow:"hidden"}}>
+            <div style={{height:"100%",width:`${prog}%`,background:"linear-gradient(90deg,#4ECDC4,#6BCB77)",borderRadius:11,transition:"width .8s ease"}}/>
+          </div>
+          <div style={{display:"flex",justifyContent:"space-between",marginTop:6,fontSize:12,fontWeight:700}}>
+            <span style={{color:"#4ECDC4"}}>{prog.toFixed(0)}% atins</span>
+            {prog>=100&&<span className="float" style={{color:"#6BCB77"}}>🎉 Obiectiv atins!</span>}
+          </div>
+        </>}
+      </div>
+
+      <div style={{display:"flex",gap:3,background:th.cardBg,borderRadius:18,padding:5,boxShadow:"0 2px 14px #0000000b",marginBottom:14,border:`1px solid ${th.cardBorder}`}}>
+        {[["home","🏠","Acasa"],["jobs","💼","Joburi"],["messages","✉️","Mesaje"],["settings","🎨","Tema"],["backup","💾","Backup"]].map(([id,em,lb])=><button key={id} onClick={()=>setTab(id)} style={{flex:1,border:"none",background:tab===id?th.tabActiveBg:"transparent",fontFamily:"inherit",fontWeight:700,fontSize:11,cursor:"pointer",padding:"7px 2px",borderRadius:13,color:tab===id?th.tabActiveColor:th.tabInactiveColor,display:"flex",flexDirection:"column",alignItems:"center",gap:1}}>
+          <span style={{fontSize:18}}>{em}</span><span>{lb}</span>
+        </button>)}
+      </div>
+
+      {tab==="home"&&<>
+        <div style={{display:"flex",gap:6,marginBottom:12}}>
+          {[["add","➕ Adauga"],["spend","💸 Cheltuie"],["history","📋 Istoric"]].map(([id,lb])=><button key={id} className="stab" style={{background:hView===id?th.btnGrad:th.ghostBg,color:hView===id?"white":th.ghostColor}} onClick={()=>setHView(id)}>{lb}</button>)}
+        </div>
+
+        {hView==="add"&&<div style={card} className="slide">
+          <div style={{fontWeight:900,fontSize:20,color:th.accentText,marginBottom:14}}>🌟 Primesti bani noi!</div>
+          <label style={{fontSize:12,fontWeight:700,color:th.textSecondary,display:"block",marginBottom:5}}>Cati bani primesti?</label>
+          <input style={{...inp,marginBottom:10}} className={shake?"shake":""} type="number" placeholder="ex: 20 PLN" value={wAmt} onChange={e=>setWAmt(e.target.value)}/>
+          <label style={{fontSize:12,fontWeight:700,color:th.textSecondary,display:"block",marginBottom:5}}>Descriere (optional)</label>
+          <input style={{...inp,marginBottom:14}} placeholder="ex: Bani de buzunar saptamanali" value={wDesc} onChange={e=>setWDesc(e.target.value)}/>
+          <div style={{background:th.splitBg,borderRadius:14,padding:14,marginBottom:14}}>
+            <div style={{fontWeight:900,fontSize:13,color:th.accentText,marginBottom:10}}>🎛️ Cum imparti?</div>
+            {CATS.map(c=><div key={c.id} style={{marginBottom:12}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
+                <span style={{fontWeight:700,fontSize:13,color:th.textPrimary}}>{c.emoji} {c.label}</span>
+                <div style={{display:"flex",alignItems:"center",gap:6}}>
+                  {wAmt&&<span style={{color:th.textMuted,fontSize:11}}>({((app.splits[c.id]/100)*parseFloat(wAmt||0)).toFixed(2)} PLN)</span>}
+                  <input type="number" min="0" max="100" value={app.splits[c.id]} onChange={e=>changeSplit(c.id,e.target.value)} style={{width:50,border:`2px solid ${c.color}55`,borderRadius:8,padding:"3px 6px",fontWeight:900,fontSize:14,color:c.color,textAlign:"center",outline:"none",background:th.cardBg,fontFamily:"inherit"}}/>
+                  <span style={{fontWeight:700,color:c.color,fontSize:13}}>%</span>
+                </div>
+              </div>
+              <input type="range" min="0" max="100" value={app.splits[c.id]} style={{accentColor:c.color}} onChange={e=>changeSplit(c.id,e.target.value)}/>
+            </div>)}
+            <div style={{textAlign:"center",fontSize:12,fontWeight:800,borderRadius:10,padding:"6px",marginTop:4,color:sTotal===100?"#6BCB77":sTotal>100?"#FF6B6B":"#FFB347",background:sTotal===100?"#f0fff4":sTotal>100?"#fff0f0":"#fff8f0"}}>
+              {sTotal===100?"✅ Perfect! Total: 100%":sTotal>100?`⚠️ Prea mult: ${sTotal}%`:`⚠️ Total: ${sTotal}% — mai adauga ${100-sTotal}%`}
+            </div>
+          </div>
+          <button className="btn" style={{width:"100%",fontSize:17,padding:15,background:sTotal===100?th.btnGrad:th.ghostBg,color:sTotal===100?"white":th.ghostColor,opacity:sTotal===100?1:0.6}} onClick={sTotal===100?addMoney:doShake}>
+            {sTotal===100?"🌟 Adauga banii!":"🎛️ Ajusteaza impartirea mai intai"}
+          </button>
+        </div>}
+
+        {hView==="spend"&&<div style={card} className="slide">
+          <div style={{fontWeight:900,fontSize:20,color:"#FF6B6B",marginBottom:14}}>💸 Cheltuie bani</div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
+            {CATS.map(c=><div key={c.id} onClick={()=>setSCat(c.id)} style={{border:`3px solid ${sCat===c.id?c.color:th.inputBorder}`,borderRadius:16,padding:12,cursor:"pointer",background:sCat===c.id?c.bg:th.cardBg,textAlign:"center",transition:"all .2s",transform:sCat===c.id?"scale(1.04)":"scale(1)"}}>
+              <div style={{fontSize:22}}>{c.emoji}</div>
+              <div style={{fontSize:11,fontWeight:800,color:c.color}}>{c.label}</div>
+              <div style={{fontSize:15,fontWeight:900,color:th.textPrimary}}>{app.balances[c.id].toFixed(2)} PLN</div>
+            </div>)}
+          </div>
+          <input style={{...inp,marginBottom:9}} className={shake?"shake":""} type="number" placeholder="Suma (PLN)" value={sAmt} onChange={e=>setSAmt(e.target.value)}/>
+          <input style={{...inp,marginBottom:14}} placeholder="Pe ce cheltuiesti?" value={sDesc} onChange={e=>setSDesc(e.target.value)}/>
+          <button className="btn" style={{width:"100%",fontSize:17,padding:15,background:th.dangerGrad,color:"white"}} onClick={spendMoney}>💸 Confirma cheltuiala</button>
+        </div>}
+
+        {hView==="history"&&<div style={card} className="slide">
+          <div style={{fontWeight:900,fontSize:20,color:th.accentText,marginBottom:14}}>📋 Istoricul lui Timi</div>
+          <div style={{marginBottom:10}}>
+            <div style={{fontWeight:900,fontSize:11,color:th.textMuted,letterSpacing:1,marginBottom:6}}>CATEGORIE</div>
+            <div className="hscroll">{HIST_CATS.map(hc=><button key={hc.id} className="fpill" style={{background:hCat===hc.id?th.btnGrad:th.ghostBg,color:hCat===hc.id?"white":th.ghostColor}} onClick={()=>setHCat(hc.id)}>{hc.emoji} {hc.label}</button>)}</div>
+          </div>
+          <div style={{marginBottom:14}}>
+            <div style={{fontWeight:900,fontSize:11,color:th.textMuted,letterSpacing:1,marginBottom:6}}>PERIOADA</div>
+            <div style={{display:"flex",gap:6}}>{HIST_PERIODS.map(hp=><button key={hp.id} className="fpill" style={{flex:1,background:hPer===hp.id?th.btnGrad:th.ghostBg,color:hPer===hp.id?"white":th.ghostColor}} onClick={()=>setHPer(hp.id)}>{hp.label}</button>)}</div>
+          </div>
+          {filtTx.length>0&&<div style={{background:th.splitBg,borderRadius:12,padding:"10px 14px",marginBottom:12,fontSize:12,fontWeight:700,color:th.textSecondary}}>
+            {filtTx.length} tranzactii • Cheltuieli: <span style={{color:"#FF6B6B"}}>{filtTx.filter(t=>t.type==="expense"||t.type==="job").reduce((s,t)=>s+t.amount,0).toFixed(2)} PLN</span> • Incasari: <span style={{color:"#6BCB77"}}>{filtTx.filter(t=>t.type==="income").reduce((s,t)=>s+t.total,0).toFixed(2)} PLN</span>
+          </div>}
+          {filtTx.length===0?<div style={{textAlign:"center",padding:"36px 0",color:th.textMuted}}><div style={{fontSize:48}}>📭</div><div style={{marginTop:10}}>Nicio tranzactie in aceasta perioada</div></div>
+          :filtTx.slice(0,40).map(tx=>{
+            const color=tx.type==="expense"?"#FF6B6B":tx.type==="job"?"#FFB347":"#6BCB77";
+            return <div key={tx.id} className="txrow" style={{borderColor:color,background:th.splitBg}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+                <div>
+                  <div style={{fontSize:11,color:th.textMuted}}>{tx.date}</div>
+                  <div style={{fontWeight:800,fontSize:14,color:th.textPrimary,marginTop:2}}>{tx.type==="job"?`${tx.jobEmoji} ${tx.jobName}`:tx.desc}</div>
+                  {(tx.type==="income"||tx.type==="job")&&tx.splits&&<div style={{display:"flex",gap:4,flexWrap:"wrap",marginTop:5}}>{CATS.map(c=>tx.splits[c.id]>0&&<span key={c.id} className="tag" style={{background:c.bg,color:c.color}}>{c.emoji} {tx.splits[c.id].toFixed(2)} PLN</span>)}</div>}
+                  {tx.type==="expense"&&<span style={{fontSize:11,color:th.textMuted}}>din {CATS.find(c=>c.id===tx.cat)?.emoji} {CATS.find(c=>c.id===tx.cat)?.label}</span>}
+                </div>
+                <div style={{fontWeight:900,fontSize:16,color,whiteSpace:"nowrap",marginLeft:8}}>{tx.type==="expense"?"-":"+"}{tx.type==="income"?tx.total:tx.amount} PLN</div>
+              </div>
+            </div>;
+          })}
+          {app.transactions.length>0&&<button className="btn" style={{width:"100%",marginTop:8,fontSize:13,background:th.ghostBg,color:"#FF6B6B"}} onClick={()=>{if(window.confirm("Resetezi tot?"))setApp(INIT);}}>🗑️ Reseteaza tot</button>}
+        </div>}
+      </>}
+
+      {tab==="jobs"&&<div className="slide">
+        <div style={{...card,marginBottom:12,background:th.splitBg}}>
+          <div style={{fontSize:13,color:th.textSecondary,lineHeight:1.5}}>💡 Introdu suma si alege <strong>cum imparti banii</strong> pe categorii!</div>
+        </div>
+        {CAT_GROUPS.map(grp=>{
+          const jobs=app.jobs.filter(j=>j.cat===grp.key&&!j.custom);
+          if(!jobs.length)return null;
+          return <div key={grp.key} style={{marginBottom:16}}>
+            <div style={{fontWeight:900,fontSize:12,color:th.textSecondary,letterSpacing:1,marginBottom:8}}>{grp.label}</div>
+            {jobs.map(job=><div key={job.id} className="jrow" style={{borderColor:th.inputBorder,background:th.cardBg}}>
+              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
+                <span style={{fontSize:22}}>{job.emoji}</span>
+                <span style={{fontWeight:700,fontSize:13,color:th.textPrimary}}>{job.name}</span>
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <input style={{...inp,flex:1,padding:"9px 12px",fontSize:14}} type="number" placeholder="Suma castigata (PLN)" value={jobAmts[job.id]||""} onChange={e=>setJobAmts(j=>({...j,[job.id]:e.target.value}))}/>
+                <button className="btn" onClick={()=>openJobSplit(job)} style={{whiteSpace:"nowrap",padding:"9px 14px",fontSize:13,background:th.successGrad,color:"white",opacity:!jobAmts[job.id]||parseFloat(jobAmts[job.id])<=0?0.4:1}}>💰 Impart!</button>
+              </div>
+            </div>)}
+          </div>;
+        })}
+        {app.jobs.filter(j=>j.custom).length>0&&<div style={{marginBottom:16}}>
+          <div style={{fontWeight:900,fontSize:12,color:th.textSecondary,letterSpacing:1,marginBottom:8}}>⭐ JOBURI PERSONALIZATE</div>
+          {app.jobs.filter(j=>j.custom).map(job=><div key={job.id} className="jrow" style={{borderColor:th.inputBorder,background:th.cardBg}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+              <div style={{display:"flex",alignItems:"center",gap:8}}>
+                <span style={{fontSize:22}}>{job.emoji}</span>
+                <span style={{fontWeight:700,fontSize:13,color:th.textPrimary}}>{job.name}</span>
+              </div>
+              <button onClick={()=>setApp(a=>({...a,jobs:a.jobs.filter(j=>j.id!==job.id)}))} style={{background:"none",border:"none",color:"#FF6B6B",cursor:"pointer",fontSize:18}}>✕</button>
+            </div>
+            <div style={{display:"flex",gap:8}}>
+              <input style={{...inp,flex:1,padding:"9px 12px",fontSize:14}} type="number" placeholder="Suma castigata (PLN)" value={jobAmts[job.id]||""} onChange={e=>setJobAmts(j=>({...j,[job.id]:e.target.value}))}/>
+              <button className="btn" onClick={()=>openJobSplit(job)} style={{whiteSpace:"nowrap",padding:"9px 14px",fontSize:13,background:th.successGrad,color:"white",opacity:!jobAmts[job.id]||parseFloat(jobAmts[job.id])<=0?0.4:1}}>💰 Impart!</button>
+            </div>
+          </div>)}
+        </div>}
+        <div style={card}>
+          <div style={{fontWeight:900,fontSize:14,color:th.accentText,marginBottom:12}}>➕ Job personalizat nou</div>
+          <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:10}}>{CUSTOM_EMOJIS.map(em=><button key={em} onClick={()=>setNewJobEmoji(em)} style={{fontSize:20,background:newJobEmoji===em?th.tabActiveBg:"transparent",border:`2px solid ${newJobEmoji===em?th.accent:"transparent"}`,borderRadius:9,padding:4,cursor:"pointer"}}>{em}</button>)}</div>
+          <input style={{...inp,marginBottom:10}} placeholder="Numele jobului..." value={newJobName} onChange={e=>setNewJobName(e.target.value)}/>
+          <button className="btn" style={{width:"100%",background:th.btnGrad,color:"white"}} onClick={()=>{if(!newJobName.trim())return;setApp(a=>({...a,jobs:[...a.jobs,{id:uid(),cat:"custom",emoji:newJobEmoji,name:newJobName.trim(),custom:true}]}));setNewJobName("");setNewJobEmoji("⭐");}}>➕ Adauga job</button>
+        </div>
+      </div>}
+
+      {tab==="messages"&&<div className="slide">
+        {[{key:"goal",title:"🏆 La atingerea obiectivului",color:"#4ECDC4"},{key:"job",title:"💼 La completarea unui job",color:"#FFB347"},{key:"invest",title:"🌱 La investitie",color:"#6BCB77"}].map(({key,title,color})=><div key={key} style={{...card,marginBottom:14}}>
+          <div style={{fontWeight:900,fontSize:14,color,marginBottom:12}}>{title}</div>
+          {app.messages[key].map((msg,idx)=>editMsg?.type===key&&editMsg?.idx===idx?<div key={idx} style={{marginBottom:8}}>
+            <textarea style={{...inp,minHeight:72,resize:"vertical",marginBottom:6}} value={editVal} onChange={e=>setEditVal(e.target.value)}/>
+            <div style={{display:"flex",gap:6}}>
+              <button className="btn" onClick={saveMsg} style={{flex:1,padding:"8px",fontSize:13,background:th.btnGrad,color:"white"}}>Salveaza</button>
+              <button className="btn" onClick={()=>setEditMsg(null)} style={{flex:1,padding:"8px",fontSize:13,background:th.ghostBg,color:th.ghostColor}}>Anuleaza</button>
+            </div>
+          </div>:<div key={idx} className="mrow" style={{borderColor:th.inputBorder,background:th.splitBg}}>
+            <div style={{flex:1,fontSize:13,fontWeight:600,color:th.textPrimary,lineHeight:1.45}}>{msg}</div>
+            <div style={{display:"flex",gap:4}}>
+              <button onClick={()=>startEdit(key,idx)} style={{background:"none",border:"none",cursor:"pointer",fontSize:15}}>✏️</button>
+              {app.messages[key].length>1&&<button onClick={()=>delMsg(key,idx)} style={{background:"none",border:"none",cursor:"pointer",fontSize:15,color:"#FF6B6B"}}>✕</button>}
+            </div>
+          </div>)}
+          <button className="btn" style={{width:"100%",marginTop:6,fontSize:13,background:th.ghostBg,color:th.ghostColor}} onClick={()=>addMsg(key)}>➕ Adauga mesaj</button>
+        </div>)}
+      </div>}
+
+      {tab==="settings"&&<div className="slide">
+        <div style={{...card,marginBottom:14}}>
+          <div style={{fontWeight:900,fontSize:18,color:th.accentText,marginBottom:16}}>🎨 Alege tema</div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+            {Object.values(THEMES).map(t=>{const TC=t.Character;return <div key={t.id} onClick={()=>setApp(a=>({...a,themeId:t.id}))} style={{borderRadius:18,overflow:"hidden",cursor:"pointer",border:`3px solid ${app.themeId===t.id?"white":"transparent"}`,boxShadow:app.themeId===t.id?"0 0 0 2px #ffffff66,0 4px 20px #00000033":"0 2px 10px #00000022",transform:app.themeId===t.id?"scale(1.04)":"scale(1)",transition:"all .2s"}}>
+              <div style={{background:t.headerGrad,padding:"12px 8px",textAlign:"center"}}>
+                <div style={{transform:"scale(0.55)",transformOrigin:"center",height:65,display:"flex",alignItems:"center",justifyContent:"center"}}><TC/></div>
+              </div>
+              <div style={{background:t.bg,padding:"8px 10px",textAlign:"center"}}>
+                <div style={{fontWeight:800,fontSize:13,color:t.accentText}}>{t.name}</div>
+                {app.themeId===t.id&&<div style={{fontSize:11,color:t.accentText}}>✅ Activa</div>}
+              </div>
+            </div>;})}
+          </div>
+        </div>
+      </div>}
+
+      {tab==="backup"&&<div className="slide">
+        <div style={{...card,marginBottom:14}}>
+          <div style={{fontWeight:900,fontSize:18,color:th.accentText,marginBottom:6}}>💾 Export backup</div>
+          <div style={{fontSize:13,color:th.textSecondary,lineHeight:1.55,marginBottom:14}}>Descarca un fisier JSON. Salveaza-l in <strong>iCloud Drive</strong>.</div>
+          <div style={{background:th.splitBg,borderRadius:12,padding:12,marginBottom:14,fontSize:12,color:th.textSecondary,lineHeight:1.7}}>
+            <div>📊 <strong>Balanta:</strong> {total.toFixed(2)} PLN</div>
+            <div>📋 <strong>Tranzactii:</strong> {app.transactions.length}</div>
+            <div>💼 <strong>Joburi:</strong> {app.jobs.length}</div>
+            <div>🎨 <strong>Tema:</strong> {th.name}</div>
+          </div>
+          <button className="btn" style={{width:"100%",fontSize:16,padding:14,background:th.btnGrad,color:"white"}} onClick={doExport}>⬇️ Descarca backup JSON</button>
+        </div>
+        <div style={{...card,marginBottom:14}}>
+          <div style={{fontWeight:900,fontSize:18,color:th.accentText,marginBottom:6}}>📂 Import backup</div>
+          <div style={{fontSize:13,color:th.textSecondary,lineHeight:1.55,marginBottom:14}}><strong>Atentie:</strong> datele curente vor fi inlocuite.</div>
+          <button className="btn" style={{width:"100%",fontSize:15,padding:14,background:th.ghostBg,color:th.ghostColor}} onClick={()=>fileRef.current?.click()}>📂 Alege fisierul (.json)</button>
+          <input ref={fileRef} type="file" accept=".json" onChange={doImport} style={{display:"none"}}/>
+          {impMsg&&<div style={{marginTop:10,padding:"10px 14px",borderRadius:12,fontSize:13,fontWeight:700,background:impMsg.startsWith("✅")?"#f0fff4":"#fff0f0",color:impMsg.startsWith("✅")?"#6BCB77":"#FF6B6B"}}>{impMsg}</div>}
+        </div>
+        <div style={{...card,fontSize:12,color:th.textMuted,lineHeight:1.65}}>💡 Exporta dupa fiecare sesiune si salveaza in iCloud Drive.</div>
+      </div>}
+
+      <div style={{textAlign:"center",marginTop:24,fontSize:11,color:th.textMuted,paddingBottom:10}}>Banutii lui Timi • Banii tai, alegerile tale</div>
+    </div>
+  </div>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
